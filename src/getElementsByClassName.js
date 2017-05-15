@@ -4,27 +4,23 @@
 // };
 
 // But instead we're going to implement it from scratch:
-var getElementsByClassName = function(className) {
+var getElementsByClassName = function(className, node) {
+
   var nodes = [];
-  // create an inner function
-  var searchNodes = function(node) {
-    // one line of pseudo code should map to one line of real code
-    // compare node's classname with className
-    var parts = node.className.split(' ');
-    if (parts.indexOf(className) >= 0) {
+  node = node || document.body;
 
-      // if matched, save node
-      nodes.push(node);
-    }
+  var parts = node.className.split(' ');
+  if (parts.indexOf(className) >= 0) {
 
-    // iterate over children
-    for (var i = 0; i < node.children.length; i++) {
-      // for each child, invoke searchNodes
-      searchNodes(node.children[i]);
-    }
-  };
-  searchNodes(document.body);
-
+    // if matched, save node
+    nodes.push(node);
+  }
+  // iterate over children
+  for (var i = 0; i < node.children.length; i++) {
+    // for each child, invoke searchNodes
+    var childResults = getElementsByClassName(className, node.children[i]);
+    nodes = nodes.concat(childResults);
+  }
   return nodes;
 };
 
